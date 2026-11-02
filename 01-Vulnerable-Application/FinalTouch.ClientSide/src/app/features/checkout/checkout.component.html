@@ -1,0 +1,108 @@
+<div class="flex flex-col lg:flex-row mt-32 gap-6 px-4 max-w-screen-xl mx-auto">
+
+  <!-- Stepper -->
+  <div class="w-full lg:w-3/4">
+    <mat-stepper
+      [linear]="true"
+      (selectionChange)="onStepChange($event)"
+      #stepper
+      class="!bg-white border border-gray-200 shadow-sm">
+
+      <!-- Step 1: Address -->
+      <mat-step label="Address" [completed]="completionStatus().address">
+        <div class="w-full flex flex-col gap-4">
+
+          <div id="address-element" class="w-full"></div>
+
+          <div class="flex justify-end">
+            <mat-checkbox [checked]="saveAddress" (change)="onSaveAddressCheckboxChange($event)">
+              Save as default address
+            </mat-checkbox>
+          </div>
+
+          <div class="flex justify-between">
+            <button class="z-0" routerLink="/shop" mat-stroked-button>Continue shopping</button>
+            <button
+              [disabled]="!completionStatus().address"
+              class="z-0 btn-next"
+              matStepperNext
+              mat-flat-button>
+              Next
+            </button>
+          </div>
+
+        </div>
+      </mat-step>
+
+      <!-- Step 2: Shipping -->
+      <mat-step label="Shipping" [completed]="completionStatus().delivery">
+        <div class="w-full flex flex-col gap-4">
+          <app-checkout-delivery (deliveryComplete)="handleDeliveryChange($event)"></app-checkout-delivery>
+
+          <div class="flex justify-between">
+            <button matStepperPrevious mat-stroked-button>Back</button>
+            <button
+              [disabled]="!completionStatus().delivery"
+              class="z-0 btn-next"
+              matStepperNext
+              mat-flat-button>
+              Next
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <!-- Step 3: Payment -->
+      <mat-step label="Payment" [completed]="completionStatus().card">
+        <div class="w-full flex flex-col gap-4">
+          <div id="payment-element" class="w-full"></div>
+
+          <div class="flex justify-between">
+            <button matStepperPrevious mat-stroked-button>Back</button>
+            <button
+              class="z-0 btn-next"
+              [disabled]="!completionStatus().card"
+              matStepperNext
+              mat-flat-button>
+              Next
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <!-- Step 4: Confirmation -->
+      <mat-step label="Confirmation">
+        <div class="w-full flex flex-col gap-4">
+          <app-checkout-review [confirmationToken]="confirmationToken"></app-checkout-review>
+
+          <div class="flex justify-between">
+            <button matStepperPrevious mat-stroked-button>Back</button>
+            <button
+              [disabled]="!confirmationToken || loading"
+              (click)="confirmPayment(stepper)"
+              matStepperNext
+              mat-flat-button
+              class="btnConfirm">
+
+              @if (loading) {
+                <mat-spinner diameter="20"></mat-spinner>
+              } @else {
+                <span>
+                  Pay {{cartService.totals()?.total | currency:'EGP':'symbol':'1.2-2'}}
+                </span>
+              }
+
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+    </mat-stepper>
+  </div>
+
+  <!-- Order Summary -->
+  <div class="w-full lg:w-1/4">
+    <app-order-summary></app-order-summary>
+  </div>
+
+</div>
