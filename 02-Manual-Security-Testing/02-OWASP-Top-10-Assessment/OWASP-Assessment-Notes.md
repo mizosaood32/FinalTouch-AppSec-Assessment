@@ -214,7 +214,13 @@ and on stripe also
 ---
 ## A09  security logging and alert failure
 
-During the assessment, application and database activity was observable, but the available logging did not provide sufficient visibility into security-relevant events such as repeated failed authentication attempts, suspicious account activity, or authorization failures. A complete logging and alerting assessment was not performed.
+During the assessment, the ASP.NET Core server console displayed operational logs, including HTTP request processing, endpoint execution, middleware activity, CORS processing, and database-related output.
+
+These logs provided visibility into normal application operations and request handling. However, the assessment did not establish whether security-relevant events, such as repeated failed authentication attempts, authorization failures, suspicious account activity, and checkout manipulation, were consistently recorded or monitored.
+
+A complete review of centralized logging, security event monitoring, alerting rules, and log retention was not performed.
+
+Conclusion: Operational logging was observed, but the effectiveness and coverage of security logging and alerting remain unverified. Further assessment is required before classifying this as a confirmed security logging weakness.
 
 ---
 ## A10 mishandling of exceptional condition 
